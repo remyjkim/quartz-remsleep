@@ -7,7 +7,7 @@ import { pageResources, renderPage } from "../../components/renderPage"
 import { FullPageLayout } from "../../cfg"
 import { pathToRoot } from "../../util/path"
 import { defaultContentPageLayout, sharedPageComponents } from "../../../quartz.layout"
-import { Content } from "../../components"
+import { PostsListWithFilter } from "../../components"
 import { styleText } from "util"
 import { write } from "./helpers"
 import { BuildCtx } from "../../util/ctx"
@@ -49,7 +49,10 @@ export const ContentPage: QuartzEmitterPlugin<Partial<FullPageLayout>> = (userOp
   const opts: FullPageLayout = {
     ...sharedPageComponents,
     ...defaultContentPageLayout,
-    pageBody: Content(),
+    pageBody: PostsListWithFilter({
+      targetSlugs: ["index", "posts/index"],
+      showAboutSection: true,
+    }),
     ...userOpts,
   }
 
@@ -83,8 +86,8 @@ export const ContentPage: QuartzEmitterPlugin<Partial<FullPageLayout>> = (userOp
           containsIndex = true
         }
 
-        // only process home page, non-tag pages, and non-index pages
-        if (slug.endsWith("/index") || slug.startsWith("tags/")) continue
+        // only process non-tag pages (folder index pages are now processed)
+        if (slug.startsWith("tags/")) continue
         yield processContent(ctx, tree, file.data, allFiles, opts, resources)
       }
 
@@ -112,7 +115,7 @@ export const ContentPage: QuartzEmitterPlugin<Partial<FullPageLayout>> = (userOp
       for (const [tree, file] of content) {
         const slug = file.data.slug!
         if (!changedSlugs.has(slug)) continue
-        if (slug.endsWith("/index") || slug.startsWith("tags/")) continue
+        if (slug.startsWith("tags/")) continue
 
         yield processContent(ctx, tree, file.data, allFiles, opts, resources)
       }

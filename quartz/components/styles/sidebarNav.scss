@@ -1,0 +1,434 @@
+@use "../../styles/variables.scss" as *;
+
+// ============================================
+// Sidebar Navigation Component
+// ============================================
+// Styled to match Hugo Lanyon theme-base-02 exactly
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  font-family: "PT Sans", Helvetica, Arial, sans-serif;
+  font-size: 0.75rem; // 12px at 16px base (matches Hugo)
+  color: rgba(255, 255, 255, 0.6);
+  
+  // Mobile toggle button (hidden on desktop)
+  .sidebar-nav-toggle {
+    display: none;
+  }
+  
+  // Navigation content
+  .sidebar-nav-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  // Home button - theme-aware background with sidebar blue text
+  .home-button {
+    display: block;
+    background-color: var(--light); // Theme background (white in light, dark in dark mode)
+    color: #234bc2; // Sidebar blue text
+    text-decoration: none;
+    font-size: 1rem; // Larger than nav items
+    font-weight: 600;
+    padding: 0.75rem 1rem;
+    margin: 0; // No margin - spans full width
+    border-radius: 0; // No border radius - rectangular
+    text-align: center;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+    width: 100%; // Full width
+    box-sizing: border-box;
+    
+    &:hover,
+    &:focus {
+      background-color: var(--lightgray); // Slightly different on hover
+      color: #234bc2; // Keep sidebar blue
+      text-decoration: none;
+    }
+    
+    &:active {
+      background-color: var(--gray); // Even more contrast on active
+      color: #234bc2;
+    }
+  }
+  
+  // Section links list - matches Hugo .sidebar-nav
+  .nav-sections {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.4rem;
+    
+    li {
+      margin: 0;
+      
+      a {
+        display: block;
+        padding: 0.1rem 0;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        font-weight: normal;
+        color: #fff;
+        text-decoration: none;
+        transition: background-color 0.15s ease;
+        
+        &:hover,
+        &:focus {
+          text-decoration: none;
+          background-color: rgba(255, 255, 255, 0.1);
+          border-color: transparent;
+        }
+      }
+      
+      &.active a {
+        text-decoration: none;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: transparent;
+      }
+      
+      // Remove top border from first item
+      &:first-child a {
+        border-top: none;
+      }
+    }
+  }
+  
+  // Separator line (for Posts section)
+  .nav-separator {
+    margin: 0;
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  // Search in sidebar
+  .nav-search {
+    padding: 0.4rem;
+
+    .search {
+      width: 100%;
+      max-width: none;
+
+      & > .search-button {
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        height: 1.75rem;
+        font-size: 0.75rem;
+        padding: 0 0.5rem;
+
+        & > p {
+          color: rgba(255, 255, 255, 0.6);
+        }
+
+        & svg .search-path {
+          stroke: rgba(255, 255, 255, 0.8);
+        }
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.15);
+        }
+      }
+    }
+  }
+
+  // Posts link - styled as nav item
+  .nav-posts {
+    padding: 0.4rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    
+    .posts-button {
+      display: block;
+      padding: 0.1rem 0;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+      font-weight: normal;
+      color: #fff;
+      text-decoration: none;
+      transition: background-color 0.15s ease;
+      
+      &:hover,
+      &:focus {
+        text-decoration: none;
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+      
+      &.active {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+  
+  // Copyright footer - matches Hugo sidebar-item styling
+  .sidebar-nav-footer {
+    padding: 1rem;
+    margin-top: auto;
+    
+    p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.75rem;
+    }
+  }
+  
+  // Icon styling - hide icons to match Hugo clean look
+  .nav-icon {
+    display: none;
+  }
+}
+
+// ============================================
+// Mobile Styles
+// ============================================
+
+@media all and ($mobile) {
+  .sidebar-nav {
+    position: relative;
+
+    // Mobile header bar - fixed at top
+    .mobile-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1001;
+      display: flex !important;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #234bc2;
+      padding: 0.75rem 1rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+
+      .mobile-header-title {
+        color: #fff;
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: none;
+          opacity: 0.9;
+        }
+      }
+
+      .mobile-header-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .mobile-header-darkmode {
+        display: flex;
+        align-items: center;
+
+        .darkmode {
+          width: 20px;
+          height: 20px;
+
+          svg {
+            fill: #fff;
+            width: 20px;
+            height: 20px;
+          }
+        }
+      }
+
+      .mobile-header-search {
+        display: flex;
+        align-items: center;
+
+        .search {
+          width: auto;
+          max-width: none;
+
+          & > .search-button {
+            background: transparent;
+            border: none;
+            padding: 0;
+            width: auto;
+            height: auto;
+            gap: 0;
+
+            // Hide the text, show only icon
+            & > p {
+              display: none;
+            }
+
+            & svg {
+              width: 20px;
+              height: 20px;
+              margin: 0;
+
+              .search-path {
+                stroke: #fff;
+                stroke-width: 2.5;
+              }
+            }
+
+            &:hover {
+              background: transparent;
+              opacity: 0.8;
+            }
+          }
+        }
+      }
+
+      .sidebar-nav-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: none;
+        padding: 0.25rem;
+        cursor: pointer;
+
+        .menu-icon {
+          stroke: white;
+          width: 24px;
+          height: 24px;
+        }
+
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+    }
+
+    // Navigation content - hidden by default on mobile
+    .sidebar-nav-content {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background-color: #234bc2;
+      padding: 4rem 1.5rem 2rem 1.5rem;
+      transform: translateY(-100%);
+      transition: transform 300ms ease-in-out;
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+
+    // When nav is open
+    &.nav-open {
+      .sidebar-nav-content {
+        transform: translateY(0);
+      }
+    }
+
+    // Mobile link styles - same as desktop
+    .nav-sections {
+      li a {
+        color: #fff;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+      }
+
+      li.active a {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+
+    .nav-separator {
+      border-top-color: rgba(255, 255, 255, 0.1);
+    }
+
+    // Home button on mobile - theme-aware styling
+    .home-button {
+      background-color: var(--light);
+      color: #234bc2;
+
+      &:hover {
+        background-color: var(--lightgray);
+        color: #234bc2;
+      }
+    }
+
+    .nav-posts {
+      .posts-button {
+        color: #fff;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        &.active {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+      }
+    }
+  }
+
+  // Backdrop when nav is open
+  .sidebar-nav.nav-open::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 999;
+    animation: fadeIn 300ms ease-in-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  // Add top padding to body content to account for fixed header
+  body {
+    padding-top: 3.5rem;
+  }
+}
+
+// ============================================
+// Desktop Right Sidebar Positioning
+// ============================================
+// Background color applied via custom.scss sidebar.right styles
+
+@media all and not ($mobile) {
+  .sidebar.right .sidebar-nav {
+    // Ensure proper spacing
+    padding: 0;
+    
+    // Match Hugo sidebar text colors
+    .nav-sections li a {
+      color: #fff;
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+    
+    .nav-sections li.active a {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .nav-separator {
+      border-top-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .nav-posts .posts-button {
+      color: #fff;
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+      
+      &.active {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+}

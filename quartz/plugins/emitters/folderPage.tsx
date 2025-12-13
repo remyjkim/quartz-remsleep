@@ -36,6 +36,11 @@ async function* processFolderInfo(
     ProcessedContent,
   ][]) {
     const slug = joinSegments(folder, "index") as FullSlug
+    
+    // Skip if this folder has an actual index.md (handled by contentPage.tsx)
+    const hasActualIndexMd = allFiles.some((file) => file.slug === slug)
+    if (hasActualIndexMd) continue
+    
     const [tree, file] = folderContent
     const cfg = ctx.cfg.configuration
     const externalResources = pageResources(pathToRoot(slug), resources)

@@ -83,6 +83,8 @@ export interface GlobalConfiguration {
    * Region Codes: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
    */
   locale: ValidLocale
+  /** Tags to display as selectable filters in the posts list */
+  filterTags?: string[]
 }
 
 export interface QuartzConfig {

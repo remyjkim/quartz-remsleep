@@ -1,16 +1,35 @@
 import { PageLayout, SharedLayout } from "./quartz/cfg"
 import * as Component from "./quartz/components"
 
+// Helper: Pages where PostsListWithFilter shows posts list instead of regular content
+const postsListTargetSlugs = ["index", "posts/index"]
+const isNotPostsListPage = (page: { fileData: { slug?: string } }) =>
+  !postsListTargetSlugs.includes(page.fileData.slug ?? "")
+
 // components shared across all pages
 export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
   header: [],
-  afterBody: [],
+  afterBody: [
+    // TagList at bottom of content
+    Component.ConditionalRender({
+      component: Component.TagList(),
+      condition: isNotPostsListPage,
+    }),
+    // Breadcrumbs at bottom of content
+    Component.ConditionalRender({
+      component: Component.Breadcrumbs(),
+      condition: isNotPostsListPage,
+    }),
+    // Backlinks moved from right sidebar
+    Component.Backlinks(),
+    // Graph view at bottom of content
+    Component.Graph(),
+    // Preview drawer for full-page previews
+    Component.PreviewDrawer(),
+  ],
   footer: Component.Footer({
-    links: {
-      GitHub: "https://github.com/jackyzha0/quartz",
-      "Discord Community": "https://discord.gg/cRFFHYye7t",
-    },
+    links: {},
   }),
 }
 
@@ -18,51 +37,76 @@ export const sharedPageComponents: SharedLayout = {
 export const defaultContentPageLayout: PageLayout = {
   beforeBody: [
     Component.ConditionalRender({
-      component: Component.Breadcrumbs(),
-      condition: (page) => page.fileData.slug !== "index",
+      component: Component.ArticleTitle(),
+      condition: isNotPostsListPage,
     }),
-    Component.ArticleTitle(),
-    Component.ContentMeta(),
-    Component.TagList(),
+    Component.ConditionalRender({
+      component: Component.ContentMeta(),
+      condition: isNotPostsListPage,
+    }),
+    // TableOfContents for mobile (below date row)
+    Component.ConditionalRender({
+      component: Component.MobileOnly(Component.TableOfContents()),
+      condition: isNotPostsListPage,
+    }),
   ],
   left: [
-    Component.PageTitle(),
-    Component.MobileOnly(Component.Spacer()),
-    Component.Flex({
-      components: [
-        {
-          Component: Component.Search(),
-          grow: true,
-        },
-        { Component: Component.Darkmode() },
-        { Component: Component.ReaderMode() },
-      ],
-    }),
-    Component.Explorer(),
+    // TableOfContents for desktop (in left sidebar)
+    Component.DesktopOnly(Component.TableOfContents()),
   ],
   right: [
-    Component.Graph(),
-    Component.DesktopOnly(Component.TableOfContents()),
-    Component.Backlinks(),
+    // SidebarNav replaces Explorer
+    Component.SidebarNav({
+      sections: [
+        { title: "About Me", slug: "01-about-me" },
+        { title: "About Blog", slug: "02-about-blog" },
+        { title: "Questions", slug: "03-questions" },
+        { title: "Bookshelf", slug: "04-bookshelf" },
+      ],
+      postsLink: {
+        title: "Posts",
+        slug: "posts",
+      },
+      showHome: true,
+      showGithub: true,
+      githubUrl: "https://github.com/remyjkim",
+      showCopyright: true,
+      showDarkmode: true,
+      showReaderMode: false,
+    }),
   ],
 }
 
 // components for pages that display lists of pages  (e.g. tags or folders)
 export const defaultListPageLayout: PageLayout = {
-  beforeBody: [Component.Breadcrumbs(), Component.ArticleTitle(), Component.ContentMeta()],
-  left: [
-    Component.PageTitle(),
-    Component.MobileOnly(Component.Spacer()),
-    Component.Flex({
-      components: [
-        {
-          Component: Component.Search(),
-          grow: true,
-        },
-        { Component: Component.Darkmode() },
-      ],
-    }),
-    Component.Explorer(),
+  beforeBody: [
+    Component.ArticleTitle(),
+    Component.ContentMeta(),
+    // TableOfContents for mobile (below date row)
+    Component.MobileOnly(Component.TableOfContents()),
   ],
-  right: [],
+  left: [
+    // TableOfContents for desktop (in left sidebar)
+    Component.DesktopOnly(Component.TableOfContents()),
+  ],
+  right: [
+    Component.SidebarNav({
+      sections: [
+        { title: "About Me", slug: "01-about-me" },
+        { title: "About Blog", slug: "02-about-blog" },
+        { title: "Questions", slug: "03-questions" },
+        { title: "Bookshelf", slug: "04-bookshelf" },
+      ],
+      postsLink: {
+        title: "Posts",
+        slug: "posts",
+      },
+      showHome: true,
+      showGithub: true,
+      githubUrl: "https://github.com/remyjkim",
+      showCopyright: true,
+      showDarkmode: true,
+      showReaderMode: false,
+    }),
+  ],
 }

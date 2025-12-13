@@ -1,0 +1,73 @@
+.posts-list-with-filter {
+  .about-blog {
+    margin-bottom: 2rem;
+  }
+
+  hr {
+    margin: 2rem 0;
+  }
+
+  .posts-section {
+    .posts-heading {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      margin-top: 0;
+      color: var(--dark);
+    }
+
+    .tag-filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin: 0 0 3rem 0;
+      padding: 0;
+
+      .tag-filter-link {
+        font-size: 1.1rem;
+        color: #5b7fa1;
+        text-decoration: none;
+        padding: 0;
+        border-radius: 0;
+        transition: color 0.15s ease;
+        cursor: pointer;
+        background: none;
+
+        &:hover {
+          color: #4a6b8a;
+          text-decoration: underline;
+        }
+
+        &.active {
+          color: #5b7fa1;
+          background: none;
+          font-weight: 400;
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .post-list-container {
+      // Inherits styles from PageList.css
+    }
+  }
+}
+
+// Mobile responsiveness
+@media (max-width: 600px) {
+  .posts-list-with-filter {
+    .posts-section {
+      .posts-heading {
+        font-size: 1.75rem;
+      }
+
+      .tag-filter-bar {
+        gap: 1rem;
+
+        .tag-filter-link {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+}

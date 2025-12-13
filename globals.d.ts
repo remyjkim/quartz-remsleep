@@ -13,5 +13,6 @@ export declare global {
   interface Window {
     spaNavigate(url: URL, isBack: boolean = false)
     addCleanup(fn: (...args: any[]) => void)
+    openDrawer(url: URL, hash: string, content: Node): void
   }
 }

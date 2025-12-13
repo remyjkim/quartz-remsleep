@@ -1,3 +1,336 @@
 @use "./base.scss";
+@use "./variables.scss" as *;
 
-// put your custom CSS here!
+// ============================================
+// SidebarNav: Right Sidebar Mobile Overrides
+// ============================================
+// SidebarNav mobile styles are handled in sidebarNav.scss
+// This section is kept for any additional overrides if needed
+
+// ============================================
+// Header: Remove Top Spacing
+// ============================================
+// Remove the large top margin from page-header
+
+.page > #quartz-body .page-header {
+  margin-top: 0 !important;
+}
+
+// ============================================
+// Typography Adjustments (Hugo-inspired)
+// ============================================
+// Enhanced typography with larger sizes, bolder headings, more spacing
+
+// Base font-size: 16px (increased from 15px)
+// This affects ALL rem calculations throughout the site
+html {
+  font-size: 16px !important;
+}
+
+body {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+// Headings: Bolder and larger with more top spacing
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;  // Semi-bold (increased from 400)
+  letter-spacing: -0.01rem;
+}
+
+h1 {
+  font-size: 1.75em;      // 28px (increased from 1.2em/19.2px)
+  margin-top: 3rem;       // 48px top spacing (large gap)
+  margin-bottom: 1.5rem;  // 24px bottom spacing
+}
+
+h2 {
+  font-size: 1.5em;       // 24px (increased from 1.1em/17.6px)
+  margin-top: 2.5rem;     // 40px top spacing
+  margin-bottom: 1.25rem; // 20px bottom spacing
+}
+
+h3 {
+  font-size: 1.25em;      // 20px (increased from 1em/16px)
+  margin-top: 2rem;       // 32px top spacing
+  margin-bottom: 1rem;    // 16px bottom spacing
+}
+
+h4 {
+  font-size: 1.1em;       // 17.6px
+  margin-top: 1.75rem;    // 28px top spacing
+  margin-bottom: 1rem;
+}
+
+h5 {
+  font-size: 1em;         // 16px
+  margin-top: 1.5rem;     // 24px top spacing
+  margin-bottom: 0.75rem;
+}
+
+h6 {
+  font-size: 0.9em;       // 14.4px (increased from 0.7em/11.2px)
+  margin-top: 1.25rem;    // 20px top spacing
+  margin-bottom: 0.75rem;
+}
+
+// Body text: Larger and more readable
+p {
+  font-size: 1em;         // 16px (increased from 0.95em/15.2px)
+  margin-bottom: 1.2em;   // 19.2px
+  line-height: 1.7;
+}
+
+// ============================================
+// Content Width Adjustments
+// ============================================
+// Match Hugo's narrower content width for better readability
+// Left-align content (like Hugo) - empty space flows to the right
+
+.page > #quartz-body {
+  .center {
+    // Constrain article content - LEFT-ALIGNED
+    article {
+      max-width: 38rem; // Hugo's container width (28rem base + padding)
+      margin-left: 0; // Left-align to match Hugo layout
+      margin-right: auto; // Push empty space to the right
+
+      @media all and ($desktop) {
+        max-width: 42rem; // Slightly wider on desktop
+      }
+
+      @media all and ($mobile) {
+        max-width: none; // Full width on mobile
+      }
+    }
+
+    // Constrain hr separator to match content width - LEFT-ALIGNED
+    > hr {
+      max-width: 38rem;
+      margin-left: 0; // Left-align
+      margin-right: auto;
+
+      @media all and ($desktop) {
+        max-width: 42rem; // Match desktop article width
+      }
+
+      @media all and ($mobile) {
+        max-width: none;
+      }
+    }
+
+    // Constrain page-header components (Breadcrumbs, ArticleTitle, etc.)
+    // LEFT-ALIGNED to match Hugo layout
+    .page-header {
+      max-width: 38rem;
+      margin-left: 0; // Left-align
+      margin-right: auto;
+
+      @media all and ($desktop) {
+        max-width: 42rem; // Match desktop article width
+      }
+
+      @media all and ($mobile) {
+        max-width: none;
+      }
+
+      // Ensure child components respect container width
+      & > * {
+        max-width: 100%; // Don't exceed parent
+      }
+    }
+
+    // Constrain page-footer components (Graph, Backlinks, etc.)
+    // LEFT-ALIGNED to match Hugo layout
+    .page-footer {
+      max-width: 38rem;
+      margin-left: 0; // Left-align
+      margin-right: auto;
+
+      @media all and ($desktop) {
+        max-width: 42rem; // Match desktop article width
+      }
+
+      @media all and ($mobile) {
+        max-width: none;
+      }
+
+      // Ensure child components (Graph, Backlinks) respect container width
+      & > * {
+        max-width: 100%; // Don't exceed parent
+      }
+    }
+
+    // Constrain posts-list-with-filter to match article width
+    // LEFT-ALIGNED to match Hugo layout
+    .posts-list-with-filter {
+      max-width: 38rem;
+      margin-left: 0; // Left-align
+      margin-right: auto;
+
+      @media all and ($desktop) {
+        max-width: 42rem; // Match desktop article width
+      }
+
+      @media all and ($mobile) {
+        max-width: none;
+      }
+    }
+  }
+}
+
+// ============================================
+// Sidebar Styling (Hugo-inspired)
+// ============================================
+// Match Hugo's exact sidebar dimensions and styling
+
+// Reduce left sidebar right padding to minimize gap between sidebar and content
+.page > #quartz-body {
+  .sidebar.left {
+    padding-right: 1rem; // Reduced from 2rem (base.scss) to minimize gap
+
+    // Hide left sidebar on mobile (TOC not needed, matches right sidebar behavior)
+    @media all and ($mobile) {
+      display: none !important;
+    }
+  }
+}
+
+@media all and not ($mobile) {
+  .sidebar.right {
+    // Custom narrow sidebar - 100px
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
+    
+    // HUGO EXACT POSITIONING
+    // Override grid positioning with fixed positioning
+    position: fixed !important;
+    right: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    
+    // HUGO EXACT STYLING - theme-base-02
+    background-color: #234bc2 !important;      // Hugo theme-base-02 sidebar color
+    font-family: "PT Sans", Helvetica, Arial, sans-serif !important;
+    font-size: 0.75rem !important;             // Hugo sidebar font size (12px)
+    color: rgba(255, 255, 255, 0.6) !important; // Hugo sidebar text color
+    
+    // Overflow and scrolling
+    overflow-y: auto;
+    overflow-x: hidden;
+    
+    // Z-index to match Hugo
+    z-index: 10;
+    
+    // NO PADDING on container - Hugo applies padding to individual items
+    // (.sidebar-nav has padding: 0.4rem, .sidebar-item has padding: 1rem)
+    padding: 0 !important;
+    box-sizing: border-box;
+    
+    // Override text colors for better contrast on blue background
+    h1, h2, h3, h4, h5, h6, p, span, li {
+      color: rgba(255, 255, 255, 0.9);
+    }
+    
+    a {
+      color: #fff;
+      
+      &:hover {
+        color: rgba(255, 255, 255, 1);
+      }
+    }
+    
+    // Home button - override to keep blue text
+    .home-button {
+      color: #234bc2 !important; // Sidebar blue (override white link color)
+      
+      &:hover,
+      &:focus {
+        color: #234bc2 !important;
+      }
+    }
+    
+    // SidebarNav styling on blue background
+    .sidebar-nav {
+      // Ensure background matches Hugo
+      background-color: #234bc2;
+      
+      // Base text color
+      color: rgba(255, 255, 255, 0.6);
+      
+      // Links inherit white color (handled in sidebarNav.scss)
+      a {
+        color: #fff;
+      }
+      
+      // Theme controls row below Posts button
+      .sidebar-nav-controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.75rem 0;
+        margin-top: 0.5rem;
+        
+        // Make icons white on blue background - force white in both themes
+        .darkmode,
+        .readermode {
+          svg {
+            fill: #ffffff !important;
+            stroke: #ffffff !important;
+            color: #ffffff !important;
+            
+            &:hover {
+              opacity: 0.8;
+            }
+          }
+        }
+      }
+    }
+    
+    // Backlinks styling
+    .backlinks {
+      h3, a {
+        color: rgba(255, 255, 255, 0.9);
+      }
+      
+      a:hover {
+        color: #fff;
+      }
+    }
+  }
+}
+
+// Force white icons in sidebar for both light and dark themes
+:root[saved-theme="light"],
+:root[saved-theme="dark"] {
+  .sidebar.right .sidebar-nav-controls {
+    .darkmode,
+    .readermode {
+      svg,
+      svg path {
+        fill: #ffffff !important;
+        stroke: #ffffff !important;
+      }
+    }
+  }
+
+  // Adjust content area to prevent sliding under fixed sidebar (desktop/tablet only)
+  @media all and not ($mobile) {
+    .page > #quartz-body {
+      // Update grid to account for 100px right sidebar
+      grid-template-columns: $sidePanelWidth auto 100px !important;
+
+      .center {
+        // Add right margin to match sidebar width
+        margin-right: 100px;
+
+        // Limit content width to match Hugo's narrower container
+        article {
+          max-width: 38rem; // Hugo's largest container width
+        }
+      }
+    }
+  }
+}

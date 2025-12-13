@@ -8,7 +8,7 @@ import * as Plugin from "./quartz/plugins"
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "Quartz 4",
+    pageTitle: "Remy Kim",
     pageTitleSuffix: "",
     enableSPA: true,
     enablePopovers: true,
@@ -19,36 +19,37 @@ const config: QuartzConfig = {
     baseUrl: "quartz.jzhao.xyz",
     ignorePatterns: ["private", "templates", ".obsidian"],
     defaultDateType: "modified",
+    filterTags: ["ai", "crypto", "finance", "markets", "epistemology"],
     theme: {
       fontOrigin: "googleFonts",
       cdnCaching: true,
       typography: {
-        header: "Schibsted Grotesk",
-        body: "Source Sans Pro",
+        header: "PT Sans",
+        body: "PT Sans",
         code: "IBM Plex Mono",
       },
       colors: {
         lightMode: {
-          light: "#faf8f8",
-          lightgray: "#e5e5e5",
-          gray: "#b8b8b8",
-          darkgray: "#4e4e4e",
-          dark: "#2b2b2b",
-          secondary: "#284b63",
-          tertiary: "#84a59d",
-          highlight: "rgba(143, 159, 169, 0.15)",
-          textHighlight: "#fff23688",
+          light: "#ffffff",           // White background (Hugo default)
+          lightgray: "#e5e5e5",       // Light gray for borders
+          gray: "#9a9a9a",            // Gray for metadata/dates
+          darkgray: "#515151",        // Main text color (from Hugo)
+          dark: "#313131",            // Headings color (from Hugo)
+          secondary: "#268bd2",       // Primary blue (Hugo link color)
+          tertiary: "#6a7fb5",        // Lighter blue for hover states
+          highlight: "rgba(38, 139, 210, 0.1)",  // Light blue highlight
+          textHighlight: "#fff23688", // Keep yellow text highlight
         },
         darkMode: {
-          light: "#161618",
-          lightgray: "#393639",
-          gray: "#646464",
-          darkgray: "#d4d4d4",
-          dark: "#ebebec",
-          secondary: "#7b97aa",
-          tertiary: "#84a59d",
-          highlight: "rgba(143, 159, 169, 0.15)",
-          textHighlight: "#b3aa0288",
+          light: "#1a1a1a",           // Dark background
+          lightgray: "#393639",       // Dark gray for borders
+          gray: "#646464",            // Medium gray
+          darkgray: "#d4d4d4",        // Light text
+          dark: "#ebebec",            // Headings in dark mode
+          secondary: "#6a9fb5",       // Softer blue for dark mode
+          tertiary: "#84a59d",        // Tertiary accent
+          highlight: "rgba(106, 159, 181, 0.15)",  // Dark mode highlight
+          textHighlight: "#b3aa0288", // Dark mode text highlight
         },
       },
     },

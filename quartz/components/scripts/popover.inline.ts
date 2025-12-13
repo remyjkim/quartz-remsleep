@@ -68,6 +68,24 @@ async function mouseEnterHandler(
   popoverInner.dataset.contentType = contentType ?? undefined
   popoverElement.appendChild(popoverInner)
 
+  // Add "Open in Side" button at the TOP of the popover
+  const drawerButton = document.createElement("button")
+  drawerButton.classList.add("drawer-trigger")
+  drawerButton.textContent = "Open in Side"
+  drawerButton.setAttribute("aria-label", "Open full preview in side drawer")
+  drawerButton.addEventListener("click", (e) => {
+    e.stopPropagation()
+    e.preventDefault()
+    // Clone the content to avoid moving it from popover
+    const contentClone = popoverInner.cloneNode(true) as Node
+    // Open drawer with cloned content
+    if (window.openDrawer) {
+      window.openDrawer(new URL(link.href), hash, contentClone)
+    }
+  })
+  // Insert button as the first child (at the top)
+  popoverInner.appendChild(drawerButton)
+
   switch (contentTypeCategory) {
     case "image":
       const img = document.createElement("img")

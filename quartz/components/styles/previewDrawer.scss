@@ -1,0 +1,216 @@
+@use "../../styles/variables.scss" as *;
+
+/**
+ * Preview Drawer Styles
+ * 
+ * A right-side sliding drawer (70% viewport width) for displaying full previews.
+ * Features smooth transitions, responsive design, and dark mode support.
+ */
+
+// Backdrop overlay
+.drawer-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(2px);
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+// Main drawer container
+.preview-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 70vw;
+  max-width: 1200px;
+  height: 100vh;
+  background-color: var(--light);
+  z-index: 999;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+
+  &.active {
+    transform: translateX(0);
+  }
+
+  // Drawer header
+  .drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--lightgray);
+    flex-shrink: 0;
+    background-color: var(--light);
+    min-height: 60px;
+
+    .drawer-title {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: $semiBoldWeight;
+      color: var(--darkgray);
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding-right: 1rem;
+    }
+
+    .drawer-close {
+      background: none;
+      border: none;
+      color: var(--gray);
+      cursor: pointer;
+      padding: 0.5rem;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+      flex-shrink: 0;
+
+      &:hover {
+        background-color: var(--lightgray);
+        color: var(--darkgray);
+      }
+
+      &:focus {
+        outline: 2px solid var(--secondary);
+        outline-offset: 2px;
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
+  // Scrollable content area
+  .drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1.5rem;
+    background-color: var(--light);
+
+    // Smooth scrolling
+    scroll-behavior: smooth;
+    overscroll-behavior: contain;
+
+    // Focus outline for accessibility
+    &:focus {
+      outline: none;
+    }
+
+    // Ensure content fits within drawer
+    & > * {
+      max-width: 100%;
+    }
+
+    // Image handling
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    // PDF iframe handling
+    iframe {
+      width: 100%;
+      min-height: 500px;
+      border: none;
+    }
+
+    // Typography adjustments for better reading
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+
+    p {
+      margin-bottom: 1rem;
+    }
+
+    // Code blocks
+    pre {
+      overflow-x: auto;
+    }
+
+    // Tables
+    table {
+      display: block;
+      overflow-x: auto;
+      width: 100%;
+    }
+  }
+
+  // Tablet breakpoint
+  @media all and ($tablet) {
+    width: 70vw;
+    max-width: none;
+  }
+
+  // Mobile breakpoint
+  @media all and ($mobile) {
+    width: 90vw;
+    max-width: none;
+
+    .drawer-header {
+      padding: 0.75rem 1rem;
+
+      .drawer-title {
+        font-size: 1rem;
+      }
+    }
+
+    .drawer-body {
+      padding: 1rem;
+    }
+  }
+}
+
+// Dark mode adjustments
+:root[saved-theme="dark"] {
+  .drawer-backdrop {
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+
+  .preview-drawer {
+    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.5);
+  }
+}
+
+// Prevent scroll on body when drawer is open
+body:has(.preview-drawer.active) {
+  overflow: hidden;
+}

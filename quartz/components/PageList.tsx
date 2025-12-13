@@ -69,6 +69,7 @@ export const PageList: QuartzComponent = ({ cfg, fileData, allFiles, limit, sort
       {list.map((page) => {
         const title = page.frontmatter?.title
         const tags = page.frontmatter?.tags ?? []
+        const displayTags = tags.slice(0, 5) // Only show first 5 tags
 
         return (
           <li class="section-li">
@@ -84,7 +85,7 @@ export const PageList: QuartzComponent = ({ cfg, fileData, allFiles, limit, sort
                 </h3>
               </div>
               <ul class="tags">
-                {tags.map((tag) => (
+                {displayTags.map((tag) => (
                   <li>
                     <a
                       class="internal tag-link"

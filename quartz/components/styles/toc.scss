@@ -9,6 +9,19 @@
   &:has(button.toc-header.collapsed) {
     flex: 0 1 1.4rem;
   }
+
+  // Mobile: emphasized with border box
+  @media all and ($mobile) {
+    display: flex !important;
+    overflow: visible !important;
+    max-height: none !important;
+    border: 1px solid var(--lightgray);
+    padding: 0.75rem 1rem;
+    border-radius: 5px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    box-sizing: border-box;
+  }
 }
 
 button.toc-header {
@@ -46,6 +59,14 @@ ul.toc-content.overflow {
   max-height: calc(100% - 2rem);
   overscroll-behavior: contain;
   list-style: none;
+  transition: max-height 0.3s ease, opacity 0.3s ease, margin 0.3s ease;
+
+  &.collapsed {
+    max-height: 0;
+    opacity: 0;
+    margin: 0;
+    overflow: hidden;
+  }
 
   & > li > a {
     color: var(--dark);
