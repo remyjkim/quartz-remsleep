@@ -17,9 +17,10 @@ const config: QuartzConfig = {
     },
     locale: "en-US",
     baseUrl: "remyjkim.com",
-    ignorePatterns: ["private", "templates", ".obsidian"],
+    ignorePatterns: ["private", "templates", ".obsidian", "drafts"],
     defaultDateType: "modified",
-    filterTags: ["ai", "crypto", "finance", "markets", "epistemology"],
+    filterTags: ["intelligence", "system", "measure", "intentionality", "question"],
+    showPostTags: true,
     theme: {
       fontOrigin: "googleFonts",
       cdnCaching: true,

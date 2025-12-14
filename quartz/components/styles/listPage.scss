@@ -33,6 +33,22 @@ li.section-li {
       grid-column: 1 / 3;
       grid-row: 2 / 3;
       margin-top: 0.5em;
+
+      li {
+        display: inline;
+        margin-right: 0.5em;
+      }
+
+      a.tag-link {
+        font-size: 0.85em;
+        font-weight: 400;
+        color: var(--darkgray);
+        opacity: 0.8;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
     }
   }
 }

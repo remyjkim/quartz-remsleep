@@ -14,6 +14,7 @@ interface PostsListWithFilterOptions {
   excludeSlugs?: string[] // Slugs to exclude from post list
   showAboutSection?: boolean // Whether to show the "About Blog" content above posts
   targetSlugs?: string[] // Which pages to render on (default: ["index", "posts/index"])
+  postsPrefixes?: string[] // Folder prefixes to include as posts (default: ["posts/"])
 }
 
 const defaultOptions: PostsListWithFilterOptions = {
@@ -21,6 +22,7 @@ const defaultOptions: PostsListWithFilterOptions = {
   excludeSlugs: ["about_blog", "bookshelf", "questions", "about"],
   showAboutSection: false,
   targetSlugs: ["index", "posts/index"],
+  postsPrefixes: ["posts/"],
 }
 
 export default ((userOpts?: Partial<PostsListWithFilterOptions>) => {
@@ -41,7 +43,17 @@ export default ((userOpts?: Partial<PostsListWithFilterOptions>) => {
 
     // Posts page specific rendering
     const content = htmlToJsx(fileData.filePath!, tree) as ComponentChildren
-    const postsPrefix = "posts/"
+    const postsPrefixes = opts.postsPrefixes ?? ["posts/"]
+
+    // Helper to check if slug matches any posts prefix (but not the index of that prefix)
+    const isPostSlug = (slug: string) => {
+      return postsPrefixes.some((prefix) => {
+        // Must start with prefix and not be the index page of that prefix
+        const prefixWithoutSlash = prefix.replace(/\/$/, "")
+        const prefixIndex = prefixWithoutSlash + "/index"
+        return slug.startsWith(prefix) && slug !== prefixWithoutSlash && slug !== prefixIndex
+      })
+    }
 
     // Use configured filterTags or fall back to auto-generating from posts
     const configuredTags = cfg.filterTags
@@ -52,7 +64,7 @@ export default ((userOpts?: Partial<PostsListWithFilterOptions>) => {
             const slug = file.slug ?? ""
             const isTargetPage = targetSlugs.includes(slug)
             return (
-              slug.startsWith(postsPrefix) &&
+              isPostSlug(slug) &&
               !isTargetPage &&
               !(opts.excludeSlugs ?? []).includes(slug)
             )
@@ -62,13 +74,13 @@ export default ((userOpts?: Partial<PostsListWithFilterOptions>) => {
       ),
     ].sort((a, b) => a.localeCompare(b))
 
-    // Filter posts (only posts/ folder, exclude target pages and certain slugs, require a date)
+    // Filter posts (from configured prefixes, exclude target pages and certain slugs, require a date)
     const blogPosts = allFiles
       .filter((file) => {
         const slug = file.slug ?? ""
         const isTargetPage = targetSlugs.includes(slug)
         return (
-          slug.startsWith(postsPrefix) &&
+          isPostSlug(slug) &&
           !isTargetPage &&
           !(opts.excludeSlugs ?? []).includes(slug) &&
           file.dates?.created !== undefined // Has a date
@@ -117,7 +129,7 @@ export default ((userOpts?: Partial<PostsListWithFilterOptions>) => {
 
           {/* Post list */}
           <div class="post-list-container" data-post-list>
-            <PageList {...props} allFiles={blogPosts} />
+            <PageList {...props} allFiles={blogPosts} showTags={cfg.showPostTags ?? true} />
           </div>
         </div>
       </div>

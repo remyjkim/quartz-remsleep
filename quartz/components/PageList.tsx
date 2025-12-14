@@ -55,9 +55,10 @@ export function byDateAndAlphabeticalFolderFirst(cfg: GlobalConfiguration): Sort
 type Props = {
   limit?: number
   sort?: SortFn
+  showTags?: boolean
 } & QuartzComponentProps
 
-export const PageList: QuartzComponent = ({ cfg, fileData, allFiles, limit, sort }: Props) => {
+export const PageList: QuartzComponent = ({ cfg, fileData, allFiles, limit, sort, showTags = true }: Props) => {
   const sorter = sort ?? byDateAndAlphabeticalFolderFirst(cfg)
   let list = allFiles.sort(sorter)
   if (limit) {
@@ -84,18 +85,20 @@ export const PageList: QuartzComponent = ({ cfg, fileData, allFiles, limit, sort
                   </a>
                 </h3>
               </div>
-              <ul class="tags">
-                {displayTags.map((tag) => (
-                  <li>
-                    <a
-                      class="internal tag-link"
-                      href={resolveRelative(fileData.slug!, `tags/${tag}` as FullSlug)}
-                    >
-                      {tag}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+              {showTags && (
+                <ul class="tags">
+                  {displayTags.map((tag) => (
+                    <li>
+                      <a
+                        class="internal tag-link"
+                        href={resolveRelative(fileData.slug!, `tags/${tag}` as FullSlug)}
+                      >
+                        {tag}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </li>
         )

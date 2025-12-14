@@ -65,10 +65,10 @@ export const defaultContentPageLayout: PageLayout = {
     Component.SidebarNav({
       sections: [
         { title: "About", slug: "about" },
-        { title: "Frameworks", slug: "frameworks-models" },
+        { title: "World Models", slug: "frameworks-models" },
         { title: "Questions", slug: "questions-validations" },
-        { title: "Data", slug: "observations-tools" },
-        { title: "Creations", slug: "skills-inventions" },
+        { title: "World Data", slug: "learnings-observations" },
+        { title: "Creations", slug: "tools-creations" },
       ],
       postsLink: {
         title: "Posts",
@@ -102,8 +102,8 @@ export const defaultListPageLayout: PageLayout = {
         { title: "About", slug: "about" },
         { title: "Frameworks", slug: "frameworks-models" },
         { title: "Questions", slug: "questions-validations" },
-        { title: "Data", slug: "observations-tools" },
-        { title: "Creations", slug: "skills-inventions" },
+        { title: "Learnings", slug: "learnings-observations" },
+        { title: "Creations", slug: "tools-creations" },
       ],
       postsLink: {
         title: "Posts",

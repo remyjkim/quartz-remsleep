@@ -85,6 +85,8 @@ export interface GlobalConfiguration {
   locale: ValidLocale
   /** Tags to display as selectable filters in the posts list */
   filterTags?: string[]
+  /** Whether to show tags on each post item in the posts list (default: true) */
+  showPostTags?: boolean
 }
 
 export interface QuartzConfig {

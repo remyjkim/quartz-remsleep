@@ -52,6 +52,7 @@ export const ContentPage: QuartzEmitterPlugin<Partial<FullPageLayout>> = (userOp
     pageBody: PostsListWithFilter({
       targetSlugs: ["index", "posts/index"],
       showAboutSection: true,
+      postsPrefixes: ["posts/", "questions-validations/"],
     }),
     ...userOpts,
   }
