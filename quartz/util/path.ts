@@ -59,6 +59,7 @@ function sluggify(s: string): string {
     .split("/")
     .map((segment) =>
       segment
+        .replace(/^\d+-/, "") // strip leading number prefix (e.g., "001-", "02-", "1-")
         .replace(/\s/g, "-")
         .replace(/&/g, "-and-")
         .replace(/%/g, "-percent")

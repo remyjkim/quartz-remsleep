@@ -6,6 +6,10 @@ const postsListTargetSlugs = ["index", "posts/index"]
 const isNotPostsListPage = (page: { fileData: { slug?: string } }) =>
   !postsListTargetSlugs.includes(page.fileData.slug ?? "")
 
+// Helper: Hide title/meta only on posts/index (not home page)
+const isNotPostsIndexPage = (page: { fileData: { slug?: string } }) =>
+  page.fileData.slug !== "posts/index"
+
 // components shared across all pages
 export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
@@ -36,10 +40,12 @@ export const sharedPageComponents: SharedLayout = {
 // components for pages that display a single page (e.g. a single note)
 export const defaultContentPageLayout: PageLayout = {
   beforeBody: [
+    // Title shows on all pages except posts/index
     Component.ConditionalRender({
       component: Component.ArticleTitle(),
-      condition: isNotPostsListPage,
+      condition: isNotPostsIndexPage,
     }),
+    // ContentMeta hidden on posts list pages (home and posts/index)
     Component.ConditionalRender({
       component: Component.ContentMeta(),
       condition: isNotPostsListPage,
@@ -58,10 +64,11 @@ export const defaultContentPageLayout: PageLayout = {
     // SidebarNav replaces Explorer
     Component.SidebarNav({
       sections: [
-        { title: "About Me", slug: "01-about-me" },
-        { title: "About Blog", slug: "02-about-blog" },
-        { title: "Questions", slug: "03-questions" },
-        { title: "Bookshelf", slug: "04-bookshelf" },
+        { title: "About", slug: "about" },
+        { title: "Frameworks", slug: "frameworks-models" },
+        { title: "Questions", slug: "questions-validations" },
+        { title: "Data", slug: "observations-tools" },
+        { title: "Creations", slug: "skills-inventions" },
       ],
       postsLink: {
         title: "Posts",
@@ -92,10 +99,11 @@ export const defaultListPageLayout: PageLayout = {
   right: [
     Component.SidebarNav({
       sections: [
-        { title: "About Me", slug: "01-about-me" },
-        { title: "About Blog", slug: "02-about-blog" },
-        { title: "Questions", slug: "03-questions" },
-        { title: "Bookshelf", slug: "04-bookshelf" },
+        { title: "About", slug: "about" },
+        { title: "Frameworks", slug: "frameworks-models" },
+        { title: "Questions", slug: "questions-validations" },
+        { title: "Data", slug: "observations-tools" },
+        { title: "Creations", slug: "skills-inventions" },
       ],
       postsLink: {
         title: "Posts",
