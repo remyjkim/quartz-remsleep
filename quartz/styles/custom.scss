@@ -187,7 +187,7 @@ p {
 // Reduce left sidebar right padding to minimize gap between sidebar and content
 .page > #quartz-body {
   .sidebar.left {
-    padding-right: 1rem; // Reduced from 2rem (base.scss) to minimize gap
+    padding-right: 0.5rem; // Reduced by 50% from 1rem to minimize gap
 
     // Hide left sidebar on mobile (TOC not needed, matches right sidebar behavior)
     @media all and ($mobile) {
