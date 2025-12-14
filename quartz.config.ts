@@ -16,7 +16,7 @@ const config: QuartzConfig = {
       provider: "plausible",
     },
     locale: "en-US",
-    baseUrl: "quartz.jzhao.xyz",
+    baseUrl: "remyjkim.com",
     ignorePatterns: ["private", "templates", ".obsidian"],
     defaultDateType: "modified",
     filterTags: ["ai", "crypto", "finance", "markets", "epistemology"],
