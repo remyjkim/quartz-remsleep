@@ -8,7 +8,7 @@ import * as Plugin from "./quartz/plugins"
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "Remy Kim",
+    pageTitle: "Remsleep",
     pageTitleSuffix: "",
     enableSPA: true,
     enablePopovers: true,
@@ -16,11 +16,11 @@ const config: QuartzConfig = {
       provider: "plausible",
     },
     locale: "en-US",
-    baseUrl: "remyjkim.com",
+    baseUrl: "your-domain.com", // Example site built with this theme: remyjkim.com
     ignorePatterns: ["private", "templates", ".obsidian", "drafts"],
     defaultDateType: "modified",
-    filterTags: ["intelligence", "system", "measure", "intentionality"],
-    filterCategories: ["question", "framework", "creation"],
+    filterTags: ["quartz", "theme", "digital-garden", "documentation"],
+    filterCategories: ["documentation", "feature", "guide"],
     showPostTags: true,
     theme: {
       fontOrigin: "googleFonts",

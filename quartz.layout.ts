@@ -76,11 +76,9 @@ export const defaultContentPageLayout: PageLayout = {
     // SidebarNav replaces Explorer
     Component.SidebarNav({
       sections: [
-        { title: "About", slug: "about" },
-        { title: "World Models", slug: "frameworks-models" },
-        { title: "Questions", slug: "questions-validations" },
-        { title: "World Data", slug: "learnings-observations" },
-        { title: "Creations", slug: "tools-creations" },
+        { title: "Features", slug: "features" },
+        { title: "Configs", slug: "configuration" },
+        { title: "Docs", slug: "documentation" },
       ],
       postsLink: {
         title: "Posts",
@@ -88,7 +86,7 @@ export const defaultContentPageLayout: PageLayout = {
       },
       showHome: true,
       showGithub: true,
-      githubUrl: "https://github.com/remyjkim",
+      githubUrl: "https://github.com/remyjkim/quartz-remsleep", // Example site: remyjkim.com
       showCopyright: true,
       showDarkmode: true,
       showReaderMode: false,
@@ -111,11 +109,9 @@ export const defaultListPageLayout: PageLayout = {
   right: [
     Component.SidebarNav({
       sections: [
-        { title: "About", slug: "about" },
-        { title: "Frameworks", slug: "frameworks-models" },
-        { title: "Questions", slug: "questions-validations" },
-        { title: "Learnings", slug: "learnings-observations" },
-        { title: "Creations", slug: "tools-creations" },
+        { title: "Features", slug: "features" },
+        { title: "Configuration", slug: "configuration" },
+        { title: "Documentation", slug: "documentation" },
       ],
       postsLink: {
         title: "Posts",
@@ -123,7 +119,7 @@ export const defaultListPageLayout: PageLayout = {
       },
       showHome: true,
       showGithub: true,
-      githubUrl: "https://github.com/remyjkim",
+      githubUrl: "https://github.com/remyjkim/quartz-remsleep", // Example site: remyjkim.com
       showCopyright: true,
       showDarkmode: true,
       showReaderMode: false,

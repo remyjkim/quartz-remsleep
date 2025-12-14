@@ -54,7 +54,7 @@ Click internal links to open a slide-out preview panel instead of navigating awa
 ### 1. Clone and Install
 
 ```bash
-git clone https://github.com/remyjkim/remsleep-quartz.git my-garden
+git clone https://github.com/remyjkim/quartz-remsleep.git my-garden
 cd my-garden
 npm install
 ```
