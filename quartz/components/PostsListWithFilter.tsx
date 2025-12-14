@@ -33,9 +33,14 @@ export default ((userOpts?: Partial<PostsListWithFilterOptions>) => {
   const PostsListWithFilter: QuartzComponent = (props: QuartzComponentProps) => {
     const { fileData, allFiles, cfg, tree } = props
 
-    // Only render on target pages (default: home and /posts)
+    // Check if this page should show posts list
+    // Priority: frontmatter.showPostsList > targetSlugs fallback
+    const showPostsList = fileData.frontmatter?.showPostsList
     const targetSlugs = opts.targetSlugs ?? ["index"]
-    if (!targetSlugs.includes(fileData.slug ?? "")) {
+    const shouldShowPostsList = showPostsList === true ||
+      (showPostsList === undefined && targetSlugs.includes(fileData.slug ?? ""))
+
+    if (!shouldShowPostsList) {
       // Fall back to standard content rendering for other pages
       const content = htmlToJsx(fileData.filePath!, tree) as ComponentChildren
       const classes: string[] = fileData.frontmatter?.cssclasses ?? []
@@ -76,16 +81,44 @@ export default ((userOpts?: Partial<PostsListWithFilterOptions>) => {
       ),
     ].sort((a, b) => a.localeCompare(b))
 
+    // Use configured filterCategories or fall back to auto-generating from posts
+    const configuredCategories = cfg.filterCategories
+    const allCategories = configuredCategories ?? [
+      ...new Set(
+        allFiles
+          .filter((file) => {
+            const slug = file.slug ?? ""
+            const isTargetPage = targetSlugs.includes(slug)
+            return (
+              isPostSlug(slug) &&
+              !isTargetPage &&
+              !(opts.excludeSlugs ?? []).includes(slug)
+            )
+          })
+          .flatMap((data) => data.frontmatter?.categories ?? []),
+      ),
+    ].sort((a, b) => a.localeCompare(b))
+
+    // Get frontmatter-based filters (for page-specific filtering)
+    const postsFilterTags = fileData.frontmatter?.postsFilterTags as string[] | undefined
+    const postsFilterCategories = fileData.frontmatter?.postsFilterCategories as string[] | undefined
+
     // Filter posts (from configured prefixes, exclude target pages and certain slugs, require a date)
     const blogPosts = allFiles
       .filter((file) => {
         const slug = file.slug ?? ""
         const isTargetPage = targetSlugs.includes(slug)
+        const hasRequiredTag = !postsFilterTags ||
+          postsFilterTags.some(tag => (file.frontmatter?.tags ?? []).includes(tag))
+        const hasRequiredCategory = !postsFilterCategories ||
+          postsFilterCategories.some(cat => (file.frontmatter?.categories ?? []).includes(cat))
         return (
           isPostSlug(slug) &&
           !isTargetPage &&
           !(opts.excludeSlugs ?? []).includes(slug) &&
-          file.dates?.created !== undefined // Has a date
+          file.dates?.created !== undefined && // Has a date
+          hasRequiredTag &&
+          hasRequiredCategory
         )
       })
       .sort(byDateAndAlphabetical(cfg))
@@ -112,12 +145,13 @@ export default ((userOpts?: Partial<PostsListWithFilterOptions>) => {
         <div class="posts-section">
           <h2 class="posts-heading">Posts</h2>
 
-          {/* Tag filter bar */}
-          <div class="tag-filter-bar" data-tag-filter>
+          {/* Filter bar (tags + categories) */}
+          <div class="filter-bar" data-filter-bar>
             <a
               href="#"
-              class="tag-filter-link active"
-              data-tag="all"
+              class="filter-link active"
+              data-filter="all"
+              data-filter-type="all"
               data-router-ignore
             >
               All
@@ -127,19 +161,31 @@ export default ((userOpts?: Partial<PostsListWithFilterOptions>) => {
               return (
                 <a
                   href={tagHref}
-                  class="tag-filter-link"
-                  data-tag={tag}
+                  class="filter-link filter-tag"
+                  data-filter={tag}
+                  data-filter-type="tag"
                   data-router-ignore
                 >
                   {tag}
                 </a>
               )
             })}
+            {allCategories.map((category) => (
+              <a
+                href="#"
+                class="filter-link filter-category"
+                data-filter={category}
+                data-filter-type="category"
+                data-router-ignore
+              >
+                {category}
+              </a>
+            ))}
           </div>
 
           {/* Post list */}
           <div class="post-list-container" data-post-list>
-            <PageList {...props} allFiles={blogPosts} showTags={cfg.showPostTags ?? true} />
+            <PageList {...props} allFiles={blogPosts} showTags={cfg.showPostTags ?? true} showCategories={cfg.showPostCategories ?? true} />
           </div>
 
           {/* Pagination controls */}

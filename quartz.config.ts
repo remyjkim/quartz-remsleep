@@ -19,7 +19,8 @@ const config: QuartzConfig = {
     baseUrl: "remyjkim.com",
     ignorePatterns: ["private", "templates", ".obsidian", "drafts"],
     defaultDateType: "modified",
-    filterTags: ["intelligence", "system", "measure", "intentionality", "question"],
+    filterTags: ["intelligence", "system", "measure", "intentionality"],
+    filterCategories: ["question", "framework", "creation"],
     showPostTags: true,
     theme: {
       fontOrigin: "googleFonts",

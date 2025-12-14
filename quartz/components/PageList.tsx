@@ -56,9 +56,10 @@ type Props = {
   limit?: number
   sort?: SortFn
   showTags?: boolean
+  showCategories?: boolean
 } & QuartzComponentProps
 
-export const PageList: QuartzComponent = ({ cfg, fileData, allFiles, limit, sort, showTags = true }: Props) => {
+export const PageList: QuartzComponent = ({ cfg, fileData, allFiles, limit, sort, showTags = true, showCategories = true }: Props) => {
   const sorter = sort ?? byDateAndAlphabeticalFolderFirst(cfg)
   let list = allFiles.sort(sorter)
   if (limit) {
@@ -70,7 +71,9 @@ export const PageList: QuartzComponent = ({ cfg, fileData, allFiles, limit, sort
       {list.map((page) => {
         const title = page.frontmatter?.title
         const tags = page.frontmatter?.tags ?? []
+        const categories = page.frontmatter?.categories ?? []
         const displayTags = tags.slice(0, 5) // Only show first 5 tags
+        const displayCategories = categories.slice(0, 3) // Only show first 3 categories
 
         return (
           <li class="section-li">
@@ -85,9 +88,19 @@ export const PageList: QuartzComponent = ({ cfg, fileData, allFiles, limit, sort
                   </a>
                 </h3>
               </div>
-              {showTags && (
+              {(showTags || showCategories) && (
                 <ul class="tags">
-                  {displayTags.map((tag) => (
+                  {showCategories && displayCategories.map((category) => (
+                    <li>
+                      <a
+                        class="internal category-link"
+                        href="#"
+                      >
+                        {category}
+                      </a>
+                    </li>
+                  ))}
+                  {showTags && displayTags.map((tag) => (
                     <li>
                       <a
                         class="internal tag-link"

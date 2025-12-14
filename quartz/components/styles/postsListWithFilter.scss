@@ -16,16 +16,15 @@
       color: var(--dark);
     }
 
-    .tag-filter-bar {
+    .filter-bar {
       display: flex;
       flex-wrap: wrap;
       gap: 1.5rem;
       margin: 0 0 3rem 0;
       padding: 0;
 
-      .tag-filter-link {
+      .filter-link {
         font-size: 1.1rem;
-        color: #5b7fa1;
         text-decoration: none;
         padding: 0;
         border-radius: 0;
@@ -33,22 +32,68 @@
         cursor: pointer;
         background: none;
 
+        // Default tag color
+        color: #5b7fa1;
+
         &:hover {
           color: #4a6b8a;
           text-decoration: underline;
         }
 
         &.active {
-          color: #5b7fa1;
           background: none;
           font-weight: 400;
           text-decoration: underline;
+        }
+
+        // Category-specific color (distinct from tags)
+        &.filter-category {
+          color: #8b5a8b;
+
+          &:hover {
+            color: #6b4a6b;
+          }
+
+          &.active {
+            color: #8b5a8b;
+          }
+        }
+
+        // Tag-specific color (for clarity)
+        &.filter-tag {
+          color: #5b7fa1;
+
+          &:hover {
+            color: #4a6b8a;
+          }
+
+          &.active {
+            color: #5b7fa1;
+          }
         }
       }
     }
 
     .post-list-container {
       // Inherits styles from PageList.css
+
+      // Category link styling on post items
+      .category-link {
+        color: #8b5a8b !important;
+
+        &:hover {
+          color: #6b4a6b !important;
+        }
+      }
+
+      // Tag link styling on post items (for consistency)
+      .tag-link {
+        color: #5b7fa1 !important;
+
+        &:hover {
+          color: #4a6b8a !important;
+        }
+      }
     }
 
     // Pagination controls
@@ -115,10 +160,10 @@
         font-size: 1.75rem;
       }
 
-      .tag-filter-bar {
+      .filter-bar {
         gap: 1rem;
 
-        .tag-filter-link {
+        .filter-link {
           font-size: 1rem;
         }
       }

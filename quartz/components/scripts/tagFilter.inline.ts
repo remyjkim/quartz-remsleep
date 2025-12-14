@@ -1,6 +1,6 @@
 function initTagFilter() {
   const container = document.querySelector(".posts-list-with-filter")
-  const filterBar = document.querySelector("[data-tag-filter]")
+  const filterBar = document.querySelector("[data-filter-bar]")
   const postList = document.querySelector("[data-post-list]")
   const pagination = document.querySelector("[data-pagination]")
 
@@ -8,7 +8,7 @@ function initTagFilter() {
     return // Not on home page or elements not found
   }
 
-  const filterLinks = filterBar.querySelectorAll(".tag-filter-link")
+  const filterLinks = filterBar.querySelectorAll(".filter-link")
   const postItems = Array.from(postList.querySelectorAll(".section-li"))
 
   // Get pagination config from data attributes
@@ -16,24 +16,36 @@ function initTagFilter() {
 
   // State
   let currentPage = 1
-  let currentTag = "all"
+  let currentFilter = "all"
+  let currentFilterType: "all" | "tag" | "category" = "all"
   let filteredPosts: Element[] = [...postItems]
 
-  // Create a map of post items to their tags
+  // Create maps of post items to their tags and categories
   const postTagMap = new Map<Element, Set<string>>()
+  const postCategoryMap = new Map<Element, Set<string>>()
 
   postItems.forEach((item) => {
+    // Collect tags
     const tagElements = item.querySelectorAll("a.tag-link")
     const tags = new Set<string>()
-
     tagElements.forEach((tagEl) => {
       const tagText = tagEl.textContent?.trim()
       if (tagText) {
         tags.add(tagText)
       }
     })
-
     postTagMap.set(item, tags)
+
+    // Collect categories
+    const categoryElements = item.querySelectorAll("a.category-link")
+    const categories = new Set<string>()
+    categoryElements.forEach((catEl) => {
+      const catText = catEl.textContent?.trim()
+      if (catText) {
+        categories.add(catText)
+      }
+    })
+    postCategoryMap.set(item, categories)
   })
 
   // Get pagination elements
@@ -42,15 +54,27 @@ function initTagFilter() {
   const currentPageEl = pagination?.querySelector("[data-current-page]")
   const totalPagesEl = pagination?.querySelector("[data-total-pages]")
 
-  // Filter posts by tag
-  function filterByTag(tag: string): Element[] {
-    if (tag === "all") {
+  // Filter posts by tag or category
+  function filterPosts(filter: string, filterType: "all" | "tag" | "category"): Element[] {
+    if (filterType === "all") {
       return [...postItems]
     }
-    return postItems.filter((item) => {
-      const tags = postTagMap.get(item)
-      return tags?.has(tag) ?? false
-    })
+
+    if (filterType === "tag") {
+      return postItems.filter((item) => {
+        const tags = postTagMap.get(item)
+        return tags?.has(filter) ?? false
+      })
+    }
+
+    if (filterType === "category") {
+      return postItems.filter((item) => {
+        const categories = postCategoryMap.get(item)
+        return categories?.has(filter) ?? false
+      })
+    }
+
+    return [...postItems]
   }
 
   // Calculate total pages for current filter
@@ -107,11 +131,12 @@ function initTagFilter() {
     updatePaginationUI()
   }
 
-  // Handle tag filter
-  function handleTagFilter(selectedTag: string) {
-    currentTag = selectedTag
+  // Handle filter selection
+  function handleFilter(filter: string, filterType: "all" | "tag" | "category") {
+    currentFilter = filter
+    currentFilterType = filterType
     currentPage = 1 // Reset to first page when filter changes
-    filteredPosts = filterByTag(selectedTag)
+    filteredPosts = filterPosts(filter, filterType)
     displayCurrentPage()
   }
 
@@ -128,12 +153,13 @@ function initTagFilter() {
     link.addEventListener("click", (e) => {
       e.preventDefault()
       const target = e.currentTarget as HTMLElement
-      const selectedTag = target.getAttribute("data-tag")
+      const filter = target.getAttribute("data-filter")
+      const filterType = target.getAttribute("data-filter-type") as "all" | "tag" | "category"
 
-      if (!selectedTag) return
+      if (!filter || !filterType) return
 
       updateActiveLink(target)
-      handleTagFilter(selectedTag)
+      handleFilter(filter, filterType)
 
       // Update URL hash for shareable links
       updateUrlHash()
@@ -167,9 +193,12 @@ function initTagFilter() {
   function updateUrlHash() {
     const params: string[] = []
 
-    if (currentTag !== "all") {
-      params.push(`tag=${currentTag}`)
+    if (currentFilterType === "tag") {
+      params.push(`tag=${currentFilter}`)
+    } else if (currentFilterType === "category") {
+      params.push(`category=${currentFilter}`)
     }
+
     if (currentPage > 1) {
       params.push(`page=${currentPage}`)
     }
@@ -190,29 +219,50 @@ function initTagFilter() {
   }
 
   // Parse URL hash for state
-  function parseUrlHash(): { tag: string; page: number } {
+  function parseUrlHash(): { filter: string; filterType: "all" | "tag" | "category"; page: number } {
     const hash = window.location.hash.substring(1)
     const params = new URLSearchParams(hash)
 
+    const tag = params.get("tag")
+    const category = params.get("category")
+
+    if (tag) {
+      return {
+        filter: tag,
+        filterType: "tag",
+        page: parseInt(params.get("page") ?? "1", 10),
+      }
+    }
+
+    if (category) {
+      return {
+        filter: category,
+        filterType: "category",
+        page: parseInt(params.get("page") ?? "1", 10),
+      }
+    }
+
     return {
-      tag: params.get("tag") ?? "all",
+      filter: "all",
+      filterType: "all",
       page: parseInt(params.get("page") ?? "1", 10),
     }
   }
 
   // Initialize from URL hash
   function initFromHash() {
-    const { tag, page } = parseUrlHash()
+    const { filter, filterType, page } = parseUrlHash()
 
-    // Set tag filter
-    if (tag !== "all") {
+    // Set filter
+    if (filterType !== "all") {
       const matchingLink = Array.from(filterLinks).find(
-        (link) => link.getAttribute("data-tag") === tag,
+        (link) => link.getAttribute("data-filter") === filter && link.getAttribute("data-filter-type") === filterType,
       )
       if (matchingLink) {
         updateActiveLink(matchingLink)
-        currentTag = tag
-        filteredPosts = filterByTag(tag)
+        currentFilter = filter
+        currentFilterType = filterType
+        filteredPosts = filterPosts(filter, filterType)
       }
     }
 
