@@ -13,7 +13,9 @@ function initTagFilter() {
   const postTagMap = new Map<Element, Set<string>>()
 
   postItems.forEach((item) => {
-    const tagElements = item.querySelectorAll(".tag-link")
+    // Query for tag links within this post item
+    // Structure: .section-li > .section > .tags > li > a.tag-link
+    const tagElements = item.querySelectorAll("a.tag-link")
     const tags = new Set<string>()
 
     tagElements.forEach((tagEl) => {

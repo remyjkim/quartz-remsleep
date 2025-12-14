@@ -9,12 +9,13 @@ interface Options {
 
 export default ((opts?: Options) => {
   const Footer: QuartzComponent = ({ displayClass, cfg }: QuartzComponentProps) => {
+    const year = new Date().getFullYear()
     const links = opts?.links ?? []
     const hasLinks = Object.keys(links).length > 0
     
     return (
       <footer class={`${displayClass ?? ""}`}>
-        <p>All Rights Reserved. 2026</p>
+        <p>All Rights Reserved. {year}</p>
         {hasLinks && (
           <ul>
             {Object.entries(links).map(([text, link]) => (
