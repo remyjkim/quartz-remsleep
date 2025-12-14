@@ -10,6 +10,15 @@ const isNotPostsListPage = (page: { fileData: { slug?: string } }) =>
 const isNotPostsIndexPage = (page: { fileData: { slug?: string } }) =>
   page.fileData.slug !== "posts/index"
 
+// Helper: Content pages are nested 2+ levels deep (e.g., posts/hfrl/index)
+// Section pages are top-level indexes (e.g., index, about/index, posts/index)
+const isContentPage = (page: { fileData: { slug?: string } }) => {
+  const slug = page.fileData.slug ?? ""
+  if (slug === "index") return false
+  const parts = slug.split("/")
+  return !(parts.length === 2 && parts[1] === "index")
+}
+
 // components shared across all pages
 export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
@@ -50,15 +59,18 @@ export const defaultContentPageLayout: PageLayout = {
       component: Component.ContentMeta(),
       condition: isNotPostsListPage,
     }),
-    // TableOfContents for mobile (below date row)
+    // TableOfContents for mobile (below date row), hidden on section pages
     Component.ConditionalRender({
       component: Component.MobileOnly(Component.TableOfContents()),
-      condition: isNotPostsListPage,
+      condition: isContentPage,
     }),
   ],
   left: [
-    // TableOfContents for desktop (in left sidebar)
-    Component.DesktopOnly(Component.TableOfContents()),
+    // TableOfContents for desktop (in left sidebar), hidden on section pages
+    Component.ConditionalRender({
+      component: Component.DesktopOnly(Component.TableOfContents()),
+      condition: isContentPage,
+    }),
   ],
   right: [
     // SidebarNav replaces Explorer

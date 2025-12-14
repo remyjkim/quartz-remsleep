@@ -1,7 +1,7 @@
-# Modified Quartz Architecture v1.1
+# Modified Quartz Architecture v1.2
 
 > Technical documentation for the customized Quartz v4 static site generator setup.
-> Last updated: December 14, 2025 (v1.1)
+> Last updated: December 14, 2025 (v1.2)
 
 ## Table of Contents
 
@@ -238,6 +238,15 @@ const isNotPostsListPage = (page) =>
 const isNotPostsIndexPage = (page) =>
   page.fileData.slug !== "posts/index"
 
+// Helper: Content pages are nested 2+ levels deep (e.g., posts/hfrl/index)
+// Section pages are top-level indexes (e.g., index, about/index, posts/index)
+const isContentPage = (page) => {
+  const slug = page.fileData.slug ?? ""
+  if (slug === "index") return false
+  const parts = slug.split("/")
+  return !(parts.length === 2 && parts[1] === "index")
+}
+
 // Shared components (used on ALL pages)
 export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
@@ -266,15 +275,18 @@ export const defaultContentPageLayout: PageLayout = {
       component: Component.ContentMeta(),
       condition: isNotPostsListPage,
     }),
-    // TOC shown in center column on mobile only
+    // TOC for mobile, hidden on section pages
     Component.ConditionalRender({
       component: Component.MobileOnly(Component.TableOfContents()),
-      condition: isNotPostsListPage,
+      condition: isContentPage,
     }),
   ],
   left: [
-    // TOC shown in left sidebar on desktop only
-    Component.DesktopOnly(Component.TableOfContents()),
+    // TOC for desktop, hidden on section pages
+    Component.ConditionalRender({
+      component: Component.DesktopOnly(Component.TableOfContents()),
+      condition: isContentPage,
+    }),
   ],
   right: [
     // SidebarNav now includes Search component
@@ -1354,7 +1366,7 @@ npx quartz build --verbose
 
 - **Search**: Moved from header to SidebarNav (desktop: sidebar, mobile: header bar)
 - **TagList & Breadcrumbs**: Moved from beforeBody to afterBody (below content)
-- **TableOfContents**: Desktop in left sidebar, mobile in center column below date
+- **TableOfContents**: Desktop in left sidebar, mobile in center column below date; hidden on section pages (home, about, posts/index, etc.)
 
 ### 4. Conditional Rendering
 
@@ -1370,12 +1382,17 @@ Component.ConditionalRender({
   condition: isNotPostsListPage,   // Hide on both home and posts/index
 })
 
-// TOC responsive placement
+// TOC hidden on section pages (home, about, posts/index, etc.)
+// Section pages = top-level indexes: "index", "about/index", "posts/index"
+// Content pages = nested 2+ levels: "posts/hfrl/index", "questions-validations/what-trade-offs/index"
 Component.ConditionalRender({
   component: Component.MobileOnly(Component.TableOfContents()),
-  condition: isNotPostsListPage,  // beforeBody for mobile
+  condition: isContentPage,  // beforeBody for mobile content pages only
 })
-Component.DesktopOnly(Component.TableOfContents())  // left sidebar for desktop
+Component.ConditionalRender({
+  component: Component.DesktopOnly(Component.TableOfContents()),
+  condition: isContentPage,  // left sidebar for desktop content pages only
+})
 ```
 
 ### 5. Configuration Options
@@ -1439,6 +1456,14 @@ Component.DesktopOnly(Component.TableOfContents())  // left sidebar for desktop
 **Styling Changes:**
 - Tag links styled as non-bold, smaller, dark gray with hover opacity
 
+### v1.2 (December 14, 2025)
+
+**Layout Changes:**
+- Added `isContentPage` helper to distinguish section pages from content pages
+- TOC (TableOfContents) now hidden on section pages (home, about/index, posts/index, questions-validations/index, etc.)
+- TOC only displays on content pages nested 2+ levels deep (e.g., posts/hfrl/index, questions-validations/what-trade-offs/index)
+- Both desktop (left sidebar) and mobile (beforeBody) TOC use the same `isContentPage` condition
+
 ---
 
-*This document reflects the architecture as of the v1.1 customization. Future modifications should update this document to maintain accurate documentation.*
+*This document reflects the architecture as of the v1.2 customization. Future modifications should update this document to maintain accurate documentation.*

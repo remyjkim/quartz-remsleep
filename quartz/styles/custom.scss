@@ -232,37 +232,32 @@ p {
     h1, h2, h3, h4, h5, h6, p, span, li {
       color: rgba(255, 255, 255, 0.9);
     }
-    
+
     a {
       color: #fff;
-      
+
       &:hover {
         color: rgba(255, 255, 255, 1);
       }
     }
-    
+
     // Home button - override to keep blue text
     .home-button {
       color: #234bc2 !important; // Sidebar blue (override white link color)
-      
+
       &:hover,
       &:focus {
         color: #234bc2 !important;
       }
     }
-    
+
     // SidebarNav styling on blue background
     .sidebar-nav {
       // Ensure background matches Hugo
       background-color: #234bc2;
-      
+
       // Base text color
       color: rgba(255, 255, 255, 0.6);
-      
-      // Links inherit white color (handled in sidebarNav.scss)
-      a {
-        color: #fff;
-      }
       
       // Theme controls row below Posts button
       .sidebar-nav-controls {

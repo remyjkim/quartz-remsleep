@@ -50,6 +50,60 @@
     .post-list-container {
       // Inherits styles from PageList.css
     }
+
+    // Pagination controls
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--lightgray);
+
+      &.hidden {
+        display: none;
+      }
+
+      .pagination-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.95rem;
+        color: var(--secondary);
+        background: transparent;
+        border: 1px solid var(--lightgray);
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+
+        svg {
+          width: 14px;
+          height: 14px;
+        }
+
+        &:hover:not(:disabled) {
+          background: var(--highlight);
+          border-color: var(--secondary);
+        }
+
+        &:disabled {
+          color: var(--gray);
+          cursor: not-allowed;
+          opacity: 0.5;
+        }
+      }
+
+      .pagination-info {
+        font-size: 0.9rem;
+        color: var(--darkgray);
+
+        span {
+          font-weight: 500;
+        }
+      }
+    }
   }
 }
 
@@ -66,6 +120,23 @@
 
         .tag-filter-link {
           font-size: 1rem;
+        }
+      }
+
+      .pagination {
+        gap: 1rem;
+        flex-wrap: wrap;
+
+        .pagination-btn {
+          padding: 0.4rem 0.8rem;
+          font-size: 0.9rem;
+        }
+
+        .pagination-info {
+          font-size: 0.85rem;
+          width: 100%;
+          text-align: center;
+          order: -1;
         }
       }
     }

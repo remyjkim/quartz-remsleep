@@ -10,19 +10,21 @@ import style from "./styles/postsListWithFilter.scss"
 import script from "./scripts/tagFilter.inline"
 
 interface PostsListWithFilterOptions {
-  postsPerPage?: number
+  postsPerPage?: number // Number of posts per page (default: 10)
   excludeSlugs?: string[] // Slugs to exclude from post list
   showAboutSection?: boolean // Whether to show the "About Blog" content above posts
   targetSlugs?: string[] // Which pages to render on (default: ["index", "posts/index"])
   postsPrefixes?: string[] // Folder prefixes to include as posts (default: ["posts/"])
+  showPagination?: boolean // Whether to show pagination controls (default: true)
 }
 
 const defaultOptions: PostsListWithFilterOptions = {
-  postsPerPage: 30,
+  postsPerPage: 10,
   excludeSlugs: ["about_blog", "bookshelf", "questions", "about"],
   showAboutSection: false,
   targetSlugs: ["index", "posts/index"],
   postsPrefixes: ["posts/"],
+  showPagination: true,
 }
 
 export default ((userOpts?: Partial<PostsListWithFilterOptions>) => {
@@ -88,8 +90,16 @@ export default ((userOpts?: Partial<PostsListWithFilterOptions>) => {
       })
       .sort(byDateAndAlphabetical(cfg))
 
+    const postsPerPage = opts.postsPerPage ?? 10
+    const totalPosts = blogPosts.length
+    const totalPages = Math.ceil(totalPosts / postsPerPage)
+
     return (
-      <div class="posts-list-with-filter">
+      <div
+        class="posts-list-with-filter"
+        data-posts-per-page={postsPerPage}
+        data-total-posts={totalPosts}
+      >
         {/* Optional about section from posts/index.md content */}
         {opts.showAboutSection && content && (
           <>
@@ -131,6 +141,36 @@ export default ((userOpts?: Partial<PostsListWithFilterOptions>) => {
           <div class="post-list-container" data-post-list>
             <PageList {...props} allFiles={blogPosts} showTags={cfg.showPostTags ?? true} />
           </div>
+
+          {/* Pagination controls */}
+          {opts.showPagination && totalPages > 1 && (
+            <div class="pagination" data-pagination>
+              <button
+                class="pagination-btn pagination-prev"
+                data-pagination-prev
+                disabled
+                aria-label="Previous page"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                Prev
+              </button>
+              <span class="pagination-info" data-pagination-info>
+                Page <span data-current-page>1</span> of <span data-total-pages>{totalPages}</span>
+              </span>
+              <button
+                class="pagination-btn pagination-next"
+                data-pagination-next
+                aria-label="Next page"
+              >
+                Next
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     )
