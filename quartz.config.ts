@@ -16,7 +16,7 @@ const config: QuartzConfig = {
       provider: "plausible",
     },
     locale: "en-US",
-    baseUrl: "your-domain.com", // Example site built with this theme: remyjkim.com
+    baseUrl: "quartz-remsleep.pages.dev", // Example site built with this theme: remyjkim.com
     ignorePatterns: ["private", "templates", ".obsidian", "drafts"],
     defaultDateType: "modified",
     filterTags: ["quartz", "theme", "digital-garden", "documentation"],
